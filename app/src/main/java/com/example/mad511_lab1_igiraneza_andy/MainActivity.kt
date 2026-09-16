@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
@@ -91,6 +93,14 @@ fun SetListApp(modifier: Modifier = Modifier) {
             }
         }) {
             Text("Add Artist")
+        }
+
+        LazyColumn {
+            items(artists) { artist ->
+                Text(
+                    "${artist.name} - ${artist.genre} - ${artist.yearFormed}"
+                )
+            }
         }
     }
 }
