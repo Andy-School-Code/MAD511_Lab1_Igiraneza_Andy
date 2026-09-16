@@ -18,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Button
+import androidx.compose.runtime.mutableStateListOf
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
@@ -46,6 +48,7 @@ fun SetListApp(modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf("") }
     var genre by remember { mutableStateOf("") }
     var yearFormed by remember { mutableStateOf("") }
+    val artists = remember { mutableStateListOf<Artist>() }
 
     Column(
         modifier = modifier.padding(16.dp)
@@ -69,6 +72,26 @@ fun SetListApp(modifier: Modifier = Modifier) {
             onValueChange = { yearFormed = it },
             label = { Text("Year Formed") }
         )
+
+        Button(onClick = {
+            val year = yearFormed.toIntOrNull()
+
+            if (year != null) {
+                artists.add(
+                    Artist(
+                        name = name,
+                        genre = genre,
+                        yearFormed = year
+                    )
+                )
+
+                name = ""
+                genre = ""
+                yearFormed = ""
+            }
+        }) {
+            Text("Add Artist")
+        }
     }
 }
 
