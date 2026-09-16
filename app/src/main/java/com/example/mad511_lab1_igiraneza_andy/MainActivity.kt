@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Row
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
@@ -97,9 +98,16 @@ fun SetListApp(modifier: Modifier = Modifier) {
 
         LazyColumn {
             items(artists) { artist ->
-                Text(
-                    "${artist.name} - ${artist.genre} - ${artist.yearFormed}"
-                )
+                Row {
+                    Text(
+                        "${artist.name} - ${artist.genre} - ${artist.yearFormed}"
+                    )
+                    Button(onClick = {
+                        artists.remove(artist)
+                    }) {
+                        Text("Delete")
+                    }
+                }
             }
         }
     }
