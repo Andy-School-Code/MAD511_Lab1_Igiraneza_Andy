@@ -147,8 +147,22 @@ fun SetListForm(
 
 @Preview(showBackground = true)
 @Composable
-fun SetListAppPreview() {
+fun SetListFormPreview() {
     MAD511_Lab1_Igiraneza_AndyTheme {
-        SetListApp()
+        SetListForm(
+            name = "Metallica",
+            onNameChange = {},
+            genre = "Metal",
+            onGenreChange = {},
+            yearFormed = "1981",
+            onYearChange = {},
+            artists = listOf(
+                Artist("Metallica", "Metal", 1981),
+                Artist("Coldplay", "Alternative", 1997),
+                Artist("Drake", "Hip Hop", 2001)
+            ),
+            onAdd = {},
+            onDelete = {}
+        )
     }
 }
