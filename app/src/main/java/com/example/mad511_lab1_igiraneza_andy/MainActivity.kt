@@ -51,32 +51,18 @@ fun SetListApp(modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf("") }
     var genre by remember { mutableStateOf("") }
     var yearFormed by remember { mutableStateOf("") }
+
     val artists = remember { mutableStateListOf<Artist>() }
 
-    Column(
-        modifier = modifier.padding(16.dp)
-    ) {
-        Text("SetList")
-
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Artist Name") }
-        )
-
-        TextField(
-            value = genre,
-            onValueChange = { genre = it },
-            label = { Text("Genre") }
-        )
-
-        TextField(
-            value = yearFormed,
-            onValueChange = { yearFormed = it },
-            label = { Text("Year Formed") }
-        )
-
-        Button(onClick = {
+    SetListForm(
+        name = name,
+        onNameChange = { name = it },
+        genre = genre,
+        onGenreChange = { genre = it },
+        yearFormed = yearFormed,
+        onYearChange = { yearFormed = it },
+        artists = artists,
+        onAdd = {
             val year = yearFormed.toIntOrNull()
 
             if (year != null) {
@@ -92,7 +78,50 @@ fun SetListApp(modifier: Modifier = Modifier) {
                 genre = ""
                 yearFormed = ""
             }
-        }) {
+        },
+        onDelete = { artist ->
+            artists.remove(artist)
+        },
+        modifier = modifier
+    )
+}
+@Composable
+fun SetListForm(
+    name: String,
+    onNameChange: (String) -> Unit,
+    genre: String,
+    onGenreChange: (String) -> Unit,
+    yearFormed: String,
+    onYearChange: (String) -> Unit,
+    artists: List<Artist>,
+    onAdd: () -> Unit,
+    onDelete: (Artist) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(16.dp)
+    ) {
+        Text("SetList")
+
+        TextField(
+            value = name,
+            onValueChange = onNameChange,
+            label = { Text("Artist Name") }
+        )
+
+        TextField(
+            value = genre,
+            onValueChange = onGenreChange,
+            label = { Text("Genre") }
+        )
+
+        TextField(
+            value = yearFormed,
+            onValueChange = onYearChange,
+            label = { Text("Year Formed") }
+        )
+
+        Button(onClick = onAdd) {
             Text("Add Artist")
         }
 
@@ -102,9 +131,12 @@ fun SetListApp(modifier: Modifier = Modifier) {
                     Text(
                         "${artist.name} - ${artist.genre} - ${artist.yearFormed}"
                     )
-                    Button(onClick = {
-                        artists.remove(artist)
-                    }) {
+
+                    Button(
+                        onClick = {
+                            onDelete(artist)
+                        }
+                    ) {
                         Text("Delete")
                     }
                 }
