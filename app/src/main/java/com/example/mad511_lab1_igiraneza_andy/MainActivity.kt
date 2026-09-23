@@ -101,6 +101,13 @@ fun SetListForm(
     onDelete: (Artist) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val nameError = name.isNotEmpty() && name.isBlank()
+    val genreError = genre.isNotEmpty() && genre.isBlank()
+
+    val yearNumber = yearFormed.toIntOrNull()
+    val yearError = yearFormed.isNotEmpty() &&
+            (yearNumber == null || yearNumber !in 1900..2026)
+
     Column(
         modifier = modifier.padding(16.dp)
     ) {
@@ -110,6 +117,12 @@ fun SetListForm(
             value = name,
             onValueChange = onNameChange,
             label = { Text("Artist Name") },
+            isError = nameError,
+            supportingText = {
+                if (nameError) {
+                    Text("Artist name is required")
+                }
+            },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -118,6 +131,12 @@ fun SetListForm(
             value = genre,
             onValueChange = onGenreChange,
             label = { Text("Genre") },
+            isError = genreError,
+            supportingText = {
+                if (genreError) {
+                    Text("Genre is required")
+                }
+            },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -126,6 +145,12 @@ fun SetListForm(
             value = yearFormed,
             onValueChange = onYearChange,
             label = { Text("Year Formed") },
+            isError = yearError,
+            supportingText = {
+                if (yearError) {
+                    Text("Enter a year between 1900 and 2026")
+                }
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
