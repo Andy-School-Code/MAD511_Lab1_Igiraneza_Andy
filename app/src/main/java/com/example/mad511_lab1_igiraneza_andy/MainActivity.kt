@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
@@ -103,22 +104,28 @@ fun SetListForm(
     ) {
         Text("SetList")
 
-        TextField(
+        OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text("Artist Name") }
+            label = { Text("Artist Name") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
-        TextField(
+        OutlinedTextField(
             value = genre,
             onValueChange = onGenreChange,
-            label = { Text("Genre") }
+            label = { Text("Genre") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
-        TextField(
+        OutlinedTextField(
             value = yearFormed,
             onValueChange = onYearChange,
-            label = { Text("Year Formed") }
+            label = { Text("Year Formed") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
         Button(onClick = onAdd) {
