@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button
@@ -27,6 +28,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.background
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
@@ -81,7 +89,7 @@ fun SetListApp(modifier: Modifier = Modifier) {
         onAdd = {
             val year = yearFormed.toIntOrNull()
 
-            if (year != null) {
+            if (year != null && year in 1900..2026) {
                 artists.add(
                     Artist(
                         name = name,
@@ -123,9 +131,24 @@ fun SetListForm(
             (yearNumber == null || yearNumber !in 1900..2026)
 
     Column(
-        modifier = modifier.padding(16.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFF5A0015))
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text("SetList")
+        Text(
+            text = "SetList",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+
+        Text(
+            text = "Add an artist to your music library",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White
+        )
 
         OutlinedTextField(
             value = name,
@@ -138,7 +161,15 @@ fun SetListForm(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White
+            )
         )
 
         OutlinedTextField(
@@ -152,7 +183,15 @@ fun SetListForm(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White
+            )
         )
 
         OutlinedTextField(
@@ -169,28 +208,62 @@ fun SetListForm(
                 keyboardType = KeyboardType.Number
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White
+            )
         )
 
         Button(
             onClick = onAdd,
             enabled = addEnabled,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF6F4E37),
+                contentColor = Color.White
+            )
         ) {
             Text("Add Artist")
         }
 
-        LazyColumn {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(artists) { artist ->
-                Row {
-                    Text(
-                        "${artist.name} - ${artist.genre} - ${artist.yearFormed}"
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = artist.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+
+                        Text(
+                            text = "${artist.genre} • ${artist.yearFormed}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White
+                        )
+                    }
 
                     Button(
                         onClick = {
                             onDelete(artist)
-                        }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF6F4E37),
+                            contentColor = Color.White
+                        )
                     ) {
                         Text("Delete")
                     }
