@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
@@ -57,6 +58,17 @@ fun SetListApp(modifier: Modifier = Modifier) {
 
     val artists = remember { mutableStateListOf<Artist>() }
 
+    val isFormValid by remember {
+        derivedStateOf {
+            val year = yearFormed.toIntOrNull()
+
+            name.isNotBlank() &&
+                    genre.isNotBlank() &&
+                    year != null &&
+                    year in 1900..2026
+        }
+    }
+
     SetListForm(
         name = name,
         onNameChange = { name = it },
@@ -65,6 +77,7 @@ fun SetListApp(modifier: Modifier = Modifier) {
         yearFormed = yearFormed,
         onYearChange = { yearFormed = it },
         artists = artists,
+        addEnabled = isFormValid,
         onAdd = {
             val year = yearFormed.toIntOrNull()
 
@@ -97,6 +110,7 @@ fun SetListForm(
     yearFormed: String,
     onYearChange: (String) -> Unit,
     artists: List<Artist>,
+    addEnabled: Boolean,
     onAdd: () -> Unit,
     onDelete: (Artist) -> Unit,
     modifier: Modifier = Modifier
@@ -158,7 +172,11 @@ fun SetListForm(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Button(onClick = onAdd) {
+        Button(
+            onClick = onAdd,
+            enabled = addEnabled,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Add Artist")
         }
 
@@ -199,6 +217,7 @@ fun SetListFormPreview() {
                 Artist("Drake", "Hip Hop", 2001)
             ),
             onAdd = {},
+            addEnabled = true,
             onDelete = {}
         )
     }
