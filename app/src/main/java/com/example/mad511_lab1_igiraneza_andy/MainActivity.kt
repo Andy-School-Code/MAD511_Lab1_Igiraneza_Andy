@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 
 data class Artist(
+    val id: Int,
     val name: String,
     val genre: String,
     val yearFormed: Int
@@ -285,9 +286,9 @@ fun SetListFormPreview() {
             yearFormed = "1981",
             onYearChange = {},
             artists = listOf(
-                Artist("Metallica", "Metal", 1981),
-                Artist("Coldplay", "Alternative", 1997),
-                Artist("Drake", "Hip Hop", 2001)
+                Artist(1,"Metallica", "Metal", 1981),
+                Artist(2,"Coldplay", "Alternative", 1997),
+                Artist(3,"Drake", "Hip Hop", 2001)
             ),
             onAdd = {},
             addEnabled = true,
