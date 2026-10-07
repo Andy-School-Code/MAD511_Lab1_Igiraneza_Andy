@@ -31,8 +31,7 @@ fun AddArtistRoute(
         onGenreChange = viewModel::updateGenre,
         onYearChange = viewModel::updateYearFormed,
         onAdd = {
-            viewModel.addArtist()
-            onArtistAdded()
+            viewModel.addArtist(onArtistAdded)
         }
     )
 }

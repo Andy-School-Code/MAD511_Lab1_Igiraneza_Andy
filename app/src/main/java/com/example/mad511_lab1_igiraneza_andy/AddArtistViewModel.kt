@@ -56,7 +56,7 @@ class AddArtistViewModel(
         _uiState.update { it.copy(yearFormed = yearFormed) }
     }
 
-    fun addArtist() {
+    fun addArtist(onArtistAdded: () -> Unit) {
         val state = _uiState.value
         val year = state.yearFormed.toIntOrNull()
 
@@ -70,6 +70,7 @@ class AddArtistViewModel(
                 genre = state.genre,
                 yearFormed = year
             )
+            onArtistAdded()
         }
     }
 }
