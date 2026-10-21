@@ -22,25 +22,28 @@ data class ArtistEntity(
     val yearFormed: Int,
 
     @ColumnInfo(name = "added_at")
-    val addedAt: Instant
+    val addedAt: Instant,
+
+    @ColumnInfo(name = "is_favourite", defaultValue = "0")
+    val isFavourite: Boolean = false
 )
 
-fun ArtistEntity.toArtist(): Artist {
-    return Artist(
+fun ArtistEntity.toArtist(): Artist =
+    Artist(
         id = id,
         name = name,
         genre = genre,
         yearFormed = yearFormed,
-        addedAt = addedAt
+        addedAt = addedAt,
+        isFavourite = isFavourite
     )
-}
 
-fun Artist.toEntity(): ArtistEntity {
-    return ArtistEntity(
+fun Artist.toEntity(): ArtistEntity =
+    ArtistEntity(
         id = id,
         name = name,
         genre = genre,
         yearFormed = yearFormed,
-        addedAt = addedAt
+        addedAt = addedAt,
+        isFavourite = isFavourite
     )
-}

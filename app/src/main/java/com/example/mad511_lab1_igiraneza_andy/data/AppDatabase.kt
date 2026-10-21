@@ -7,11 +7,15 @@ import androidx.room3.Room
 import androidx.room3.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
+import androidx.room3.AutoMigration
 
 @Database(
     entities = [ArtistEntity::class],
-    version = 1,
-    exportSchema = true
+    version = 2,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
 )
 @ColumnTypeConverters(ArtistConverters::class)
 abstract class AppDatabase : RoomDatabase() {

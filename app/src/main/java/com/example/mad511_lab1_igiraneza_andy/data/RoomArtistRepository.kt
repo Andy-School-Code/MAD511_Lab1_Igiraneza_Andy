@@ -16,7 +16,14 @@ class RoomArtistRepository(
         }
 
     override fun observeArtist(id: Int): Flow<Artist?> =
-        dao.observeById(id).map { it?.toArtist() }
+        dao.observeById(id).map { entity ->
+            entity?.toArtist()
+        }
+
+    override fun search(term: String): Flow<List<Artist>> =
+        dao.searchByPrefix(term).map { rows ->
+            rows.map { it.toArtist() }
+        }
 
     override suspend fun addArtist(
         name: String,
@@ -35,5 +42,10 @@ class RoomArtistRepository(
 
     override suspend fun deleteArtist(id: Int) {
         dao.deleteById(id)
+    }
+
+    override suspend fun setFavourite(id: Int, favourite: Boolean) {
+        val artist = dao.getById(id) ?: return
+        dao.upsert(artist.copy(isFavourite = favourite))
     }
 }

@@ -1,3 +1,4 @@
+
 package com.example.mad511_lab1_igiraneza_andy
 
 import androidx.compose.foundation.background
@@ -11,9 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,9 +27,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
 import java.time.Instant
+
+private val Burgundy = Color(0xFF5A0015)
+private val Brown = Color(0xFF6F4E37)
 
 @Composable
 fun ArtistListRoute(
@@ -37,7 +46,8 @@ fun ArtistListRoute(
     ArtistListScreen(
         uiState = uiState,
         onArtistClick = onArtistClick,
-        onAddClick = onAddClick
+        onAddClick = onAddClick,
+        onQueryChange = viewModel::onQueryChange
     )
 }
 
@@ -46,26 +56,90 @@ fun ArtistListScreen(
     uiState: ArtistListUiState,
     onArtistClick: (Int) -> Unit,
     onAddClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onQueryChange: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF5A0015))
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 32.dp,
-                bottom = 16.dp
-            ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .background(Burgundy)
+            .padding(16.dp)
     ) {
         Text(
             text = "SetList",
-            style = MaterialTheme.typography.headlineMedium,
+            fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        OutlinedTextField(
+            value = uiState.query,
+            onValueChange = onQueryChange,
+            label = { Text("Search artists") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White,
+                cursorColor = Color.White
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (uiState.artists.isEmpty()) {
+            Text(
+                text = if (uiState.hasArtists && uiState.query.isNotBlank()) {
+                    "No matching artists"
+                } else {
+                    "No artists yet"
+                },
+                color = Color.White
+            )
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(uiState.artists, key = { it.id }) { artist ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onArtistClick(artist.id) },
+                        colors = CardDefaults.cardColors(
+                            containerColor = Brown
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = if (artist.isFavourite) {
+                                    "★ ${artist.name}"
+                                } else {
+                                    artist.name
+                                },
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = artist.genre,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "Formed: ${artist.yearFormed}",
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -73,50 +147,10 @@ fun ArtistListScreen(
             onClick = onAddClick,
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF6F4E37),
-                contentColor = Color.White
+                containerColor = Brown
             )
         ) {
-            Text("Add Artist")
-        }
-
-        if (uiState.artists.isEmpty()) {
-            Text(
-                text = "No artists added yet",
-                color = Color.White
-            )
-        } else {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(
-                    items = uiState.artists,
-                    key = { artist -> artist.id }
-                ) { artist ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onArtistClick(artist.id)
-                            }
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = artist.name,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-
-                        Text(
-                            text = "${artist.genre} • ${artist.yearFormed}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
+            Text("Add Artist", color = Color.White)
         }
     }
 }
@@ -128,9 +162,10 @@ fun ArtistListScreenPreview() {
         ArtistListScreen(
             uiState = ArtistListUiState(
                 artists = listOf(
-                    Artist(1, "Metallica", "Metal", 1981,addedAt = Instant.parse("2026-10-21T12:00:00Z")),
-                    Artist(2, "Coldplay", "Alternative", 1997,addedAt = Instant.parse("2026-10-21T12:00:00Z"))
-                )
+                    Artist(1, "Metallica", "Metal", 1981, Instant.parse("2026-10-21T12:00:00Z")),
+                    Artist(2, "Coldplay", "Alternative", 1997, Instant.parse("2026-10-21T12:00:00Z"))
+                ),
+                hasArtists = true
             ),
             onArtistClick = {},
             onAddClick = {}

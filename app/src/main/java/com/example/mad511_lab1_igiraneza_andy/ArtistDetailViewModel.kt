@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 sealed interface ArtistDetailUiState {
     data class Success(val artist: Artist) : ArtistDetailUiState
@@ -14,7 +15,7 @@ sealed interface ArtistDetailUiState {
 
 class ArtistDetailViewModel(
     id: Int,
-    repository: ArtistRepository
+    private val repository: ArtistRepository
 ) : ViewModel() {
 
     val uiState: StateFlow<ArtistDetailUiState> =
@@ -31,4 +32,16 @@ class ArtistDetailViewModel(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = ArtistDetailUiState.NotFound
             )
+
+    fun toggleFavourite() {
+        val artist = (uiState.value as? ArtistDetailUiState.Success)?.artist
+            ?: return
+
+        viewModelScope.launch {
+            repository.setFavourite(
+                id = artist.id,
+                favourite = !artist.isFavourite
+            )
+        }
+    }
 }

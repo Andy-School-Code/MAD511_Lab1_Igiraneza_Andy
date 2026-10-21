@@ -19,6 +19,9 @@ interface ArtistDao {
     )
     fun searchByPrefix(prefix: String): Flow<List<ArtistEntity>>
 
+    @Query("SELECT * FROM artists WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Int): ArtistEntity?
+
     @Upsert
     suspend fun upsert(artist: ArtistEntity)
 
