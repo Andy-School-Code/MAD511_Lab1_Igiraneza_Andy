@@ -17,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ArtistDetailRoute(
@@ -49,14 +52,13 @@ fun ArtistDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                            Text("←")
+                        Text("←")
                     }
                 }
             )
         },
         modifier = modifier
     ) { innerPadding ->
-
         when (uiState) {
             is ArtistDetailUiState.Success -> {
                 Column(
@@ -69,6 +71,13 @@ fun ArtistDetailScreen(
                     Text("Name: ${uiState.artist.name}")
                     Text("Genre: ${uiState.artist.genre}")
                     Text("Year Formed: ${uiState.artist.yearFormed}")
+                    Text(
+                        "Added: ${
+                            uiState.artist.addedAt
+                                .atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("MMM d, yyyy h:mm a"))
+                        }"
+                    )
 
                     Button(
                         onClick = onDelete
@@ -100,7 +109,8 @@ fun ArtistDetailScreenPreview() {
                     id = 1,
                     name = "Metallica",
                     genre = "Metal",
-                    yearFormed = 1981
+                    yearFormed = 1981,
+                    addedAt = Instant.parse("2026-10-21T12:00:00Z")
                 )
             ),
             onBack = {},

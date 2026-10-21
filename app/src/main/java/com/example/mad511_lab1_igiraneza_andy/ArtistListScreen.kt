@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mad511_lab1_igiraneza_andy.ui.theme.MAD511_Lab1_Igiraneza_AndyTheme
+import java.time.Instant
 
 @Composable
 fun ArtistListRoute(
@@ -127,8 +128,8 @@ fun ArtistListScreenPreview() {
         ArtistListScreen(
             uiState = ArtistListUiState(
                 artists = listOf(
-                    Artist(1, "Metallica", "Metal", 1981),
-                    Artist(2, "Coldplay", "Alternative", 1997)
+                    Artist(1, "Metallica", "Metal", 1981,addedAt = Instant.parse("2026-10-21T12:00:00Z")),
+                    Artist(2, "Coldplay", "Alternative", 1997,addedAt = Instant.parse("2026-10-21T12:00:00Z"))
                 )
             ),
             onArtistClick = {},

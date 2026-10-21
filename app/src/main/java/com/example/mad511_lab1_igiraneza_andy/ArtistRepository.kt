@@ -1,5 +1,6 @@
 package com.example.mad511_lab1_igiraneza_andy
 
+import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,7 +48,8 @@ class InMemoryArtistRepository : ArtistRepository {
             id = nextId,
             name = name,
             genre = genre,
-            yearFormed = yearFormed
+            yearFormed = yearFormed,
+            addedAt = Instant.now()
         )
 
         nextId++
