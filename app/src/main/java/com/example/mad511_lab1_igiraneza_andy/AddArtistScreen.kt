@@ -1,5 +1,7 @@
+
 package com.example.mad511_lab1_igiraneza_andy
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,11 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,12 +52,35 @@ fun AddArtistScreen(
     onAdd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val fieldColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = Color.White,
+        unfocusedTextColor = Color.White,
+        focusedLabelColor = Color.White,
+        unfocusedLabelColor = Color.White,
+        focusedBorderColor = Color.White,
+        unfocusedBorderColor = Color.White
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(Color(0xFF5A0015))
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Text(
+            text = "SetList",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+
+        Text(
+            text = "Add an artist to your music library",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White
+        )
+
         OutlinedTextField(
             value = uiState.name,
             onValueChange = onNameChange,
@@ -62,7 +92,8 @@ fun AddArtistScreen(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = fieldColors
         )
 
         OutlinedTextField(
@@ -76,7 +107,8 @@ fun AddArtistScreen(
                 }
             },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = fieldColors
         )
 
         OutlinedTextField(
@@ -93,13 +125,18 @@ fun AddArtistScreen(
                 keyboardType = KeyboardType.Number
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = fieldColors
         )
 
         Button(
             onClick = onAdd,
             enabled = uiState.isAddEnabled,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF6F4E37),
+                contentColor = Color.White
+            )
         ) {
             Text("Add Artist")
         }
